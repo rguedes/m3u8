@@ -91,6 +91,7 @@ def parse(content, strict=False, custom_tags_parser=None):
 
         elif line.startswith(protocol.ext_x_discontinuity):
             state['discontinuity'] = True
+            state['current_key'] = None
 
         elif line.startswith(protocol.ext_x_cue_out_cont):
             _parse_cueout_cont(line, state)
@@ -246,6 +247,7 @@ def _parse_ts_chunk(line, data, state):
     if state.get('current_cue_out_duration'):
         segment['scte35_duration'] = state['current_cue_out_duration']
     segment['discontinuity'] = state.pop('discontinuity', False)
+    segment['discontinuity_sequence'] = data.get('discontinuity_sequence',0)
     if state.get('current_key'):
         segment['key'] = state['current_key']
     else:
