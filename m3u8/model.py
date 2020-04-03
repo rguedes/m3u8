@@ -635,7 +635,7 @@ class Playlist(BasePathMixin):
     Attributes:
 
     `stream_info` is a named tuple containing the attributes: `program_id`,
-    `bandwidth`, `average_bandwidth`, `resolution`, `codecs` and `resolution`
+    `bandwidth`, `average_bandwidth`,`video_range`, `resolution`, `codecs` and `resolution`
     which is a a tuple (w, h) of integers
 
     `media` is a list of related Media entries.
@@ -662,6 +662,7 @@ class Playlist(BasePathMixin):
             subtitles=stream_info.get('subtitles'),
             closed_captions=stream_info.get('closed_captions'),
             average_bandwidth=stream_info.get('average_bandwidth'),
+            video_range=stream_info.get('video_range'),
             program_id=stream_info.get('program_id'),
             resolution=resolution_pair,
             codecs=stream_info.get('codecs'),
@@ -723,6 +724,7 @@ class IFramePlaylist(BasePathMixin):
             subtitles=None,
             closed_captions=None,
             average_bandwidth=None,
+            video_range=None,
             program_id=iframe_stream_info.get('program_id'),
             resolution=resolution_pair,
             codecs=iframe_stream_info.get('codecs'),
@@ -754,6 +756,7 @@ class StreamInfo(object):
     bandwidth = None
     closed_captions = None
     average_bandwidth = None
+    video_range = None
     program_id = None
     resolution = None
     codecs = None
@@ -766,6 +769,7 @@ class StreamInfo(object):
         self.bandwidth = kwargs.get("bandwidth")
         self.closed_captions = kwargs.get("closed_captions")
         self.average_bandwidth = kwargs.get("average_bandwidth")
+        self.video_range = kwargs.get("video_range")
         self.program_id = kwargs.get("program_id")
         self.resolution = kwargs.get("resolution")
         self.codecs = kwargs.get("codecs")
@@ -785,6 +789,9 @@ class StreamInfo(object):
         if self.average_bandwidth is not None:
             stream_inf.append('AVERAGE-BANDWIDTH=%d' %
                               self.average_bandwidth)
+        if self.video_range is not None:
+            stream_inf.append('VIDEO-RANGE=%d' %
+                              self.video_range)
         if self.resolution is not None:
             res = str(self.resolution[
                       0]) + 'x' + str(self.resolution[1])
